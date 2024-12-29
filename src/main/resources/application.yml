@@ -1,1 +1,5 @@
-spring.application.name=LHBookStore
+spring:
+  application:
+    name: LHBookStore
+  profiles:
+    active: dev
