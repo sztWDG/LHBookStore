@@ -1,0 +1,5 @@
+spring:
+  minio:
+    endpoint: 'http://110.42.57.28:9000'
+    username: '	minio_jafMwt'
+    password: '	minio_EDWyhX'

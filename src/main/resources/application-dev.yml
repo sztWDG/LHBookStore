@@ -1,2 +1,25 @@
 server:
   port: 8081
+
+spring:
+  config:
+    import:
+      - classpath:mysql.yml
+      - classpath:minio.yml
+      - classpath:rabbitmq.yml
+      - classpath:redis.yml
+      - classpath:sa-token.yml
+      - classpath:mail.yml
+  security:
+    jwt:
+      limit:
+        base: 10
+        upgrade: 300
+        frequency: 30
+  web:
+    verify:
+      mail-limit: 60
+    flow:
+      period: 3
+      limit: 50
+      block: 30
