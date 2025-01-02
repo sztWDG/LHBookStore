@@ -17,15 +17,20 @@ public class UserRepository extends CrudRepository<UserMapper, User> {
     }
 
     public boolean usernameExists(String username) {
-        User user = findByUsernameOrEmail(username);
-        return user.getUsername().equals(username);
+        return isUserExists(username);
     }
 
     public boolean emailExists(String email) {
-        User user = findByUsernameOrEmail(email);
-        return user.getEmail().equals(email);
+        return isUserExists(email);
     }
 
+    private boolean isUserExists(String text) {
+        return this.query()
+                .eq("username", text)
+                .or()
+                .eq("email", text)
+                .exists();
+    }
 
 
 }

@@ -2,6 +2,7 @@ package com.example.entity;
 
 
 import com.example.entity.enums.ErrorCode;
+import com.example.exception.BusinessException;
 
 public record RestBean<T>(int code, T data, String message) {
     public static <T> RestBean<T> success(T data) {
@@ -26,6 +27,10 @@ public record RestBean<T>(int code, T data, String message) {
 
     public static <T> RestBean<T> error(ErrorCode errorCode) {
         return failure(errorCode.getCode(), errorCode.getMessage());
+    }
+
+    public static <T> RestBean<T> error(BusinessException e) {
+        return failure(e.getCode(), e.getMessage());
     }
 
 }

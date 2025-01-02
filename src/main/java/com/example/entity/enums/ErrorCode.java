@@ -7,6 +7,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ErrorCode {
 
+    USERNAME_OR_EMAIL_EXISTS(40010,"用户名或邮箱已存在"),
+
+
+
     UNKNOWN_ERROR(-1, "未知错误"),
     PARAMETERS_ERROR(400, "参数错误"),
     ROLE_ERROR(403, "权限不足"),

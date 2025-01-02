@@ -26,6 +26,13 @@ public class GlobalExceptionHandler {
         return RestBean.error(ErrorCode.UNKNOWN_ERROR);
     }
 
+    @ExceptionHandler(BusinessException.class)
+    @ResponseBody
+    public RestBean<String> businessExceptionHandler(BusinessException e) {
+        e.printStackTrace();
+        return RestBean.error(e);
+    }
+
     /**
      * 参数有误
      */
