@@ -6,7 +6,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum ErrorCode {
-
+    ENUM_VALUE_IS_NOT_DEFINE(40000,"枚举值没有被定义"),
     USERNAME_OR_EMAIL_EXISTS(40010,"用户名或邮箱已存在"),
 
 
