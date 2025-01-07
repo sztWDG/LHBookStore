@@ -14,10 +14,13 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    //Question3: 这边如何获得我的userId呢？
+    // QxkQuestion3: 这边如何获得我的userId呢？
     @GetMapping("info")
     public RestBean<UserInfoResp> info(){
         UserInfoResp resp = userService.getUserInfo();
         return RestBean.success(resp);
     }
+
+
+
 }

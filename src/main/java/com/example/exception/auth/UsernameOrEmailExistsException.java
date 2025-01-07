@@ -4,7 +4,7 @@ import com.example.entity.enums.ErrorCode;
 import com.example.exception.BusinessException;
 
 public class UsernameOrEmailExistsException extends BusinessException {
-    public UsernameOrEmailExistsException(ErrorCode errorCode) {
-        super(errorCode);
+    public UsernameOrEmailExistsException() {
+        super(ErrorCode.USERNAME_OR_EMAIL_EXISTS);
     }
 }

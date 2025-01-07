@@ -23,6 +23,9 @@ public class SaTokenConfig implements WebMvcConfigurer {
                 new SaInterceptor(handle -> {
                     SaRouter
                             .match("/**")
+                            .notMatch("/favicon.ico")
+                            .notMatch("/doc.html/**","/webjars/**")
+                            .notMatch("/swagger-ui.*","/v3/api-docs/**")
                             .notMatch("/api/auth/**")
                             .check(r -> StpUtil.checkLogin());
                 }

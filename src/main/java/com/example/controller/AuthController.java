@@ -1,12 +1,11 @@
 package com.example.controller;
 
 import com.example.entity.RestBean;
-import com.example.entity.vo.request.ConfirmResetReq;
-import com.example.entity.vo.request.EmailResetReq;
-import com.example.entity.vo.request.UserLoginReq;
-import com.example.entity.vo.request.UserRegisterReq;
+import com.example.entity.vo.request.*;
 import com.example.entity.vo.response.UserLoginResp;
 import com.example.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -23,6 +22,7 @@ import java.util.function.Supplier;
 @RestController
 @RequestMapping("/api/auth")
 @Validated
+@Tag(name="验证接口")
 public class AuthController {
     @Resource
     private AuthService authService;
@@ -30,6 +30,8 @@ public class AuthController {
     /**
      * 登录
      */
+    @Operation(summary = "注册登录接口")
+    //@Parameter(name = "username",description = "用户名",required = true)
     @PostMapping("/login")
     public RestBean<UserLoginResp> login(
             @RequestBody @Valid UserLoginReq req
@@ -70,16 +72,23 @@ public class AuthController {
     //登录认证
     @PostMapping("/reset-confirm")
     public RestBean<Void> resetConfirm(@RequestBody @Valid ConfirmResetReq req) throws Exception {
-        //Question!:这个地方返回值如何处理
+        //QxkQuestion!:这个地方返回值如何处理
         authService.resetConfirm(req);
         return RestBean.success();
-
     }
 
     @PostMapping("/reset-password")
     public RestBean<Void> resetConfirm(@RequestBody @Valid EmailResetReq req) throws Exception {
         authService.resetEmailAccountPassword(req);
         return RestBean.success();
+    }
+
+    //修改邮箱
+    @PostMapping("/modify-email")
+    public RestBean<Void> modifyEmail(@RequestBody @Valid ModifyEmailReq modifyEmailReq) throws Exception {
+
+       String result =  authService.modifyEmail(modifyEmailReq);
+       return result == null ? RestBean.success() : RestBean.failure(400, result);
     }
 
     private <T> RestBean<Void> messageHandle(T vo, Function<T,String> function){

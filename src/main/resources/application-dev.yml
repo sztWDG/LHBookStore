@@ -10,6 +10,7 @@ spring:
       - classpath:redis.yml
       - classpath:sa-token.yml
       - classpath:mail.yml
+      - classpath:springdoc.yml
   security:
     jwt:
       limit:

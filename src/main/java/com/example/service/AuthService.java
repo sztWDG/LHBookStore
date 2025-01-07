@@ -3,13 +3,11 @@ package com.example.service;
 import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.dto.User;
-import com.example.entity.enums.ErrorCode;
-import com.example.entity.vo.request.ConfirmResetReq;
-import com.example.entity.vo.request.EmailResetReq;
-import com.example.entity.vo.request.UserLoginReq;
-import com.example.entity.vo.request.UserRegisterReq;
+import com.example.entity.dto.UserDetails;
+import com.example.entity.vo.request.*;
 import com.example.entity.vo.response.UserLoginResp;
 import com.example.exception.auth.UsernameOrEmailExistsException;
+import com.example.repository.UserDetailsRepository;
 import com.example.repository.UserRepository;
 import com.example.utils.Const;
 import com.example.utils.FlowUtils;
@@ -17,6 +15,7 @@ import com.example.utils.JwtUtils;
 import io.github.linpeilie.Converter;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -25,6 +24,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -48,6 +48,8 @@ public class AuthService {
     private FlowUtils flow;
     @Resource
     private JwtUtils jwtUtils;
+    @Autowired
+    private UserDetailsRepository userDetailsRepository;
 
 
     public UserLoginResp login(UserLoginReq req) throws Exception {
@@ -90,18 +92,28 @@ public class AuthService {
         if (userRepository.usernameExists(req.getUsername()) ||
                 userRepository.emailExists(req.getEmail())
         ) {
-            throw new UsernameOrEmailExistsException(ErrorCode.USERNAME_OR_EMAIL_EXISTS);
+            throw new UsernameOrEmailExistsException();
         }
         //验证码校验
         String code = stringRedisTemplate.opsForValue().get(Const.VERIFY_EMAIL_DATA + req.getEmail());
-        if (code == null) {throw new Exception("验证码不能为空");}
-        if (!code.equals(req.getCode())){throw new Exception("验证码错误");}
+        if (code == null) {
+            throw new Exception("验证码不能为空");
+        }
+        if (!code.equals(req.getCode())) {
+            throw new Exception("验证码错误");
+        }
 
         User user = converter.convert(req, User.class);
         // 密码加密
         user.setPassword(BCrypt.hashpw(req.getPassword()));
+        UserDetails userDetails = new UserDetails();
         transactionTemplate.execute(
-                status -> userRepository.save(user)
+                status -> {
+                    userRepository.save(user);
+                    userDetails.setUserId(user.getId());
+                    userDetailsRepository.save(userDetails);
+                    return null;
+                }
         );
     }
 
@@ -117,7 +129,7 @@ public class AuthService {
     }
 
 
-    public void logout(){
+    public void logout() {
         String token = StpUtil.getTokenValue();
         if (jwtUtils.invalidateJwt(token)) {
             StpUtil.logout();
@@ -127,8 +139,12 @@ public class AuthService {
 
     public String resetConfirm(ConfirmResetReq req) throws Exception {
         String code = stringRedisTemplate.opsForValue().get(Const.VERIFY_EMAIL_DATA + req.getEmail());
-        if (code == null) {throw new Exception("验证码不能为空");}
-        if (!code.equals(req.getCode())){throw new Exception("验证码错误");}
+        if (code == null) {
+            throw new Exception("验证码不能为空");
+        }
+        if (!code.equals(req.getCode())) {
+            throw new Exception("验证码错误");
+        }
         return null;
     }
 
@@ -137,10 +153,57 @@ public class AuthService {
         ConfirmResetReq confirmReq = converter.convert(req, ConfirmResetReq.class);
         String verify = this.resetConfirm(confirmReq);
 
-        if (verify != null) {return;}
+        if (verify != null) {
+            return;
+        }
         String password = BCrypt.hashpw(req.getPassword());
         boolean update = userRepository.update().eq("email", email).set("password", password).update();
         //若更新密码成功，则删除redis中的旧数据（验证码）
         if (update) stringRedisTemplate.delete(Const.VERIFY_EMAIL_DATA + email);
     }
+
+
+    public String modifyEmail(ModifyEmailReq req) throws Exception {
+        String email = req.getEmail();
+        String code = this.getEmailVerifyCode(email);
+        //QxkQuestion25.1.5:id和userId有点搞混了，没理清楚关系
+        Long id = StpUtil.getLoginIdAsLong();
+
+        if (code == null) return "请先获取验证码！";
+        if (!code.equals(req.getCode())) return "验证码错误，请重新输入";
+        this.deleteEmailVerifyCode(email);
+
+        User user = userRepository.findByUsernameOrEmail(email);
+
+        if (user != null && !Objects.equals(user.getId(), id)) {
+            return "该电子邮件已经被其他账号绑定，无法完成此操作";
+        }
+        userRepository.update().set("email", email).eq("id", id).update();
+
+        return null;
+    }
+
+
+    /**
+     * 移除Redis中存储的邮件验证码
+     *
+     * @param email 电邮
+     */
+    private void deleteEmailVerifyCode(String email) {
+        String key = Const.VERIFY_EMAIL_DATA + email;
+        stringRedisTemplate.delete(key);
+    }
+
+    /**
+     * 获取Redis中存储的邮件验证码
+     *
+     * @param email 电邮
+     * @return 验证码
+     */
+    private String getEmailVerifyCode(String email) {
+        String key = Const.VERIFY_EMAIL_DATA + email;
+        return stringRedisTemplate.opsForValue().get(key);
+    }
+
+
 }
