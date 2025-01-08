@@ -77,6 +77,7 @@ public class AuthController {
         return RestBean.success();
     }
 
+    //重置密码
     @PostMapping("/reset-password")
     public RestBean<Void> resetConfirm(@RequestBody @Valid EmailResetReq req) throws Exception {
         authService.resetEmailAccountPassword(req);
@@ -91,6 +92,14 @@ public class AuthController {
        return result == null ? RestBean.success() : RestBean.failure(400, result);
     }
 
+    //修改密码
+    @PostMapping("/change-password")
+    public RestBean<Void> changePassword(@RequestBody @Valid ChangePasswordReq req) throws Exception {
+        authService.changePassword(req);
+        return RestBean.success();
+    }
+
+
     private <T> RestBean<Void> messageHandle(T vo, Function<T,String> function){
         return messageHandle(() -> function.apply(vo));
     }
@@ -99,4 +108,6 @@ public class AuthController {
         String message = action.get();
         return message == null ? RestBean.success() : RestBean.failure(400, message);
     }
+
+
 }

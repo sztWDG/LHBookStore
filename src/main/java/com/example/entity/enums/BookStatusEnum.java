@@ -26,6 +26,7 @@ public enum BookStatusEnum {
         };
     }
 
+    //前端到后端代码的反序列化
     @JsonCreator
     public BookStatusEnum deserialize(int value) {
         return switch (value) {

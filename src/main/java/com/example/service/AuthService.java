@@ -179,9 +179,20 @@ public class AuthService {
             return "该电子邮件已经被其他账号绑定，无法完成此操作";
         }
         userRepository.update().set("email", email).eq("id", id).update();
-
         return null;
     }
+
+
+    public void changePassword(ChangePasswordReq req) throws Exception {
+        Long id = StpUtil.getLoginIdAsLong();
+        //判断当前输入的原密码是否和当前用户密码相等
+        String userPassword = userRepository.query().eq("id", id).one().getPassword();
+        if (!BCrypt.checkpw(req.getPassword(), userPassword))
+            throw new Exception("原密码错误，请重新输入");
+        userRepository.update().eq("id", id).set("password", BCrypt.hashpw(req.getNewPassword())).update();
+    }
+
+
 
 
     /**
