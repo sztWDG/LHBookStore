@@ -4,18 +4,22 @@ import cn.dev33.satoken.secure.BCrypt;
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.dto.User;
 import com.example.entity.dto.UserDetails;
-import com.example.entity.vo.request.*;
-import com.example.entity.vo.response.UserLoginResp;
+import com.example.entity.vo.request.auth.ConfirmResetReq;
+import com.example.entity.vo.request.auth.UserLoginReq;
+import com.example.entity.vo.request.auth.UserRegisterReq;
+import com.example.entity.vo.request.user.ChangePasswordReq;
+import com.example.entity.vo.request.user.EmailResetReq;
+import com.example.entity.vo.request.user.ModifyEmailReq;
+import com.example.entity.vo.response.auth.UserLoginResp;
 import com.example.exception.auth.UsernameOrEmailExistsException;
-import com.example.repository.UserDetailsRepository;
-import com.example.repository.UserRepository;
+import com.example.repository.user.UserDetailsRepository;
+import com.example.repository.user.UserRepository;
 import com.example.utils.Const;
 import com.example.utils.FlowUtils;
 import com.example.utils.JwtUtils;
 import io.github.linpeilie.Converter;
 import jakarta.annotation.Resource;
 import org.springframework.amqp.core.AmqpTemplate;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
@@ -48,7 +52,7 @@ public class AuthService {
     private FlowUtils flow;
     @Resource
     private JwtUtils jwtUtils;
-    @Autowired
+    @Resource
     private UserDetailsRepository userDetailsRepository;
 
 
@@ -157,7 +161,7 @@ public class AuthService {
             return;
         }
         String password = BCrypt.hashpw(req.getPassword());
-        boolean update = userRepository.update().eq("email", email).set("password", password).update();
+        boolean update = userRepository.lambdaUpdate().eq(User::getEmail, email).set(User::getPassword, password).update();
         //若更新密码成功，则删除redis中的旧数据（验证码）
         if (update) stringRedisTemplate.delete(Const.VERIFY_EMAIL_DATA + email);
     }
@@ -178,7 +182,7 @@ public class AuthService {
         if (user != null && !Objects.equals(user.getId(), id)) {
             return "该电子邮件已经被其他账号绑定，无法完成此操作";
         }
-        userRepository.update().set("email", email).eq("id", id).update();
+        userRepository.lambdaUpdate().set(User::getEmail, email).eq(User::getId, id).update();
         return null;
     }
 
@@ -186,10 +190,10 @@ public class AuthService {
     public void changePassword(ChangePasswordReq req) throws Exception {
         Long id = StpUtil.getLoginIdAsLong();
         //判断当前输入的原密码是否和当前用户密码相等
-        String userPassword = userRepository.query().eq("id", id).one().getPassword();
+        String userPassword = userRepository.lambdaQuery().eq(User::getId, id).one().getPassword();
         if (!BCrypt.checkpw(req.getPassword(), userPassword))
             throw new Exception("原密码错误，请重新输入");
-        userRepository.update().eq("id", id).set("password", BCrypt.hashpw(req.getNewPassword())).update();
+        userRepository.lambdaUpdate().eq(User::getId, id).set(User::getPassword, BCrypt.hashpw(req.getNewPassword())).update();
     }
 
 

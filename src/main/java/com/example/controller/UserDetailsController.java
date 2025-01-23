@@ -2,9 +2,9 @@ package com.example.controller;
 
 import cn.dev33.satoken.stp.StpUtil;
 import com.example.entity.RestBean;
-import com.example.entity.vo.request.DetailsSaveReq;
-import com.example.entity.vo.response.UserDetailsResp;
-import com.example.service.UserDetailsService;
+import com.example.entity.vo.request.user.DetailsSaveReq;
+import com.example.entity.vo.response.user.UserDetailsResp;
+import com.example.service.user.UserDetailsService;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;

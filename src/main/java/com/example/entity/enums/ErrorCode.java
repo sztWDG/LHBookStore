@@ -18,6 +18,7 @@ public enum ErrorCode {
     NO_LOGIN(401, "未登录"),
     SYSTEM_ERROR(500, "系统错误");
 
+
     private final int code;
     private final String message;
 

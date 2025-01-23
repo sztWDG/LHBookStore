@@ -1,6 +1,6 @@
 spring:
   rabbitmq:
-    addresses: 110.42.57.28
+    addresses: 192.168.65.128
     username: rabbitmq
     password: rabbitmq
     virtual-host: /

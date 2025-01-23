@@ -1,8 +1,13 @@
 package com.example.controller;
 
 import com.example.entity.RestBean;
-import com.example.entity.vo.request.*;
-import com.example.entity.vo.response.UserLoginResp;
+import com.example.entity.vo.request.auth.ConfirmResetReq;
+import com.example.entity.vo.request.auth.UserLoginReq;
+import com.example.entity.vo.request.auth.UserRegisterReq;
+import com.example.entity.vo.request.user.ChangePasswordReq;
+import com.example.entity.vo.request.user.EmailResetReq;
+import com.example.entity.vo.request.user.ModifyEmailReq;
+import com.example.entity.vo.response.auth.UserLoginResp;
 import com.example.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

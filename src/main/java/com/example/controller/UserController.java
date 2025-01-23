@@ -1,8 +1,8 @@
 package com.example.controller;
 
 import com.example.entity.RestBean;
-import com.example.entity.vo.response.UserInfoResp;
-import com.example.service.UserService;
+import com.example.entity.vo.response.auth.UserInfoResp;
+import com.example.service.user.UserService;
 import jakarta.annotation.Resource;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

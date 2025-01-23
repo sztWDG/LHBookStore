@@ -6,6 +6,7 @@ import com.example.entity.RestBean;
 import com.example.entity.enums.ErrorCode;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -68,5 +69,13 @@ public class GlobalExceptionHandler {
         return RestBean.unauthorized(e.getMessage());
     }
 
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseBody
+    public RestBean<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        e.printStackTrace();
+        log.error("{}", e.getMessage());
+        return RestBean.error(ErrorCode.PARAMETERS_ERROR);
+    }
 
 }

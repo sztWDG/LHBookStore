@@ -33,4 +33,6 @@ public record RestBean<T>(int code, T data, String message) {
         return failure(e.getCode(), e.getMessage());
     }
 
+
+
 }

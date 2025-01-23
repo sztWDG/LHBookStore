@@ -2,9 +2,9 @@ package com.example.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.example.entity.RestBean;
-import com.example.entity.vo.request.BookSaveReq;
-import com.example.entity.vo.response.BooksResp;
-import com.example.service.BookService;
+import com.example.entity.vo.request.book.BookSaveReq;
+import com.example.entity.vo.response.book.BooksResp;
+import com.example.service.book.BookService;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
 import jakarta.validation.Valid;

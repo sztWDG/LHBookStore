@@ -1,5 +1,5 @@
 spring:
   data:
     redis:
-      host: 110.42.57.28
-      password: redis_NEDfTn
+      host: 192.168.65.128
+      password: redis_F8xEXx

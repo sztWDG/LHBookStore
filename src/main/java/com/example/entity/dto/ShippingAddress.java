@@ -3,27 +3,29 @@ package com.example.entity.dto;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.example.entity.vo.response.user.UserDetailsResp;
+import com.example.entity.BaseEntity;
+import com.example.entity.vo.response.user.ShippingAddressResp;
 import io.github.linpeilie.annotations.AutoMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
-@TableName("sys_user_details")
-@AutoMapper(target = UserDetailsResp.class)
 @Accessors(chain = true)
-@NoArgsConstructor
+@TableName("shipping_address")
 @AllArgsConstructor
-public class UserDetails {
+@NoArgsConstructor
+@AutoMapper(target = ShippingAddressResp.class)
+public class ShippingAddress extends BaseEntity {
     @TableId(type = IdType.AUTO)
-    Long id;
-    int gender;
+    long id;
+    String name;
     String phone;
-    String qq;
-    String wx;
-    String description;
-    Long userId;
+    String address;
+    long userId;
+
 
 }
