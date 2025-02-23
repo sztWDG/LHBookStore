@@ -11,6 +11,9 @@ public enum ErrorCode {
 
     BOOK_ISBN_IS_EXISTS(40020,"该图书已存在"),
     BOOK_ISBN_IS_NOT_ALLOW_MODIFY(40021,"不允许修改图书Isbn"),
+    BOOK_NUMBER_IS_NOT_ENOUGH(40022,"图书数量不足"),
+    BOOK_TYPE_IS_EXISTS(40023,"图书种类已存在"),
+    BOOK_TYPE_BIND_BOOK_IS_NOT_NULL(40024, "图书类型被绑定"),
 
     UNKNOWN_ERROR(-1, "未知错误"),
     PARAMETERS_ERROR(400, "参数错误"),

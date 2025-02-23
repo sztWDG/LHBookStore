@@ -10,4 +10,9 @@ public class BookRepository extends CrudRepository<BookMapper, Book> {
     public boolean isBookIsbnExists(String isbn) {
         return this.query().eq("isbn", isbn).exists();
     }
+
+    public boolean getBooksByTypeId(Long typeId) {
+//        return this.lambdaQuery().eq(Book::getTypeId, typeId).count() > 0;
+        return this.lambdaQuery().eq(Book::getTypeId, typeId).list().isEmpty();
+    }
 }
