@@ -27,7 +27,7 @@ import lombok.experimental.Accessors;
 @TableName("sys_user")
 public class User extends BaseEntity {
     @TableId(type = IdType.AUTO)
-    Long id;
+    long id;
     String username;
     String password;
     String email;

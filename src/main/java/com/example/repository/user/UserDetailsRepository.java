@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDetailsRepository extends CrudRepository<UserDetailsMapper, UserDetails> {
 
-    public UserDetails getUserDetailsByUserId(Long userId) {
+    public UserDetails getUserDetailsByUserId(long userId) {
         return this.query()
                 .eq("user_id", userId)
                 .select()

@@ -33,14 +33,14 @@ public class BookTypeController {
 
     @Operation(summary = "更新书本类型")
     @PutMapping("/{id}")
-    public RestBean<Void> updateBookType(@PathVariable Long id, @RequestParam @NotBlank String name){
+    public RestBean<Void> updateBookType(@PathVariable long id, @RequestParam @NotBlank String name){
         bookTypeService.updateBookType(id, name);
         return RestBean.success();
     }
 
     @Operation(summary = "删除书本类型")
     @DeleteMapping("/{id}")
-    public RestBean<Void> deleteBookType(@PathVariable Long id){
+    public RestBean<Void> deleteBookType(@PathVariable long id){
 
         bookTypeService.deleteBookTypeById(id);
         return RestBean.success();

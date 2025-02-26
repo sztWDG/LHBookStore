@@ -6,6 +6,6 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class BookTypeResp {
-    Long id;
+    long id;
     String name;
 }

@@ -14,8 +14,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -25,17 +23,17 @@ import java.math.BigDecimal;
 @AutoMapper(target = BooksResp.class)
 public class Book extends BaseEntity {
     @TableId(type = IdType.AUTO)
-    Long id;
+    long id;
     String name;
     String author;
     String publisher;
     String isbn;
-    BigDecimal price;
+    double price;
     int number;
     @Nullable
     String cover;
     BookStatusEnum status;
-    Long typeId;
+    long typeId;
     @Nullable
     String description;
 }

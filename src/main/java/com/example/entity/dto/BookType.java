@@ -21,6 +21,6 @@ import lombok.experimental.Accessors;
 @AutoMapper(target = BookTypeResp.class)
 public class BookType extends BaseEntity {
     @TableId(type = IdType.AUTO)
-    Long id;
+    long id;
     String name;
 }

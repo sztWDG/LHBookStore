@@ -38,7 +38,7 @@ public class BookTypeService {
     }
 
 
-    public void updateBookType(Long id, String name) {
+    public void updateBookType(long id, String name) {
         checkBookTypeIsExists(name);
         bookTypeRepository.lambdaUpdate()
                 .eq(BookType::getId, id)
@@ -51,7 +51,7 @@ public class BookTypeService {
         }
     }
 
-    public void deleteBookTypeById(Long id) {
+    public void deleteBookTypeById(long id) {
         //要删除之前，要校验一下，若该类型下还有存在书本，则拒绝删除
         //要引入BookRepository以查询是否有该类型书本
         //1.通过typeId查找出该类型所有图书，若List为空则说明无 ✔

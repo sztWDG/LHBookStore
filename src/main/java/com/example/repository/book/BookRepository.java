@@ -8,11 +8,15 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class BookRepository extends CrudRepository<BookMapper, Book> {
     public boolean isBookIsbnExists(String isbn) {
-        return this.query().eq("isbn", isbn).exists();
+        return this.lambdaQuery().eq(Book::getIsbn, isbn).exists();
     }
 
-    public boolean getBooksByTypeId(Long typeId) {
+    public boolean getBooksByTypeId(long typeId) {
 //        return this.lambdaQuery().eq(Book::getTypeId, typeId).count() > 0;
         return this.lambdaQuery().eq(Book::getTypeId, typeId).list().isEmpty();
+    }
+
+    public boolean isBookExists(long id) {
+        return this.lambdaQuery().eq(Book::getId, id).exists();
     }
 }

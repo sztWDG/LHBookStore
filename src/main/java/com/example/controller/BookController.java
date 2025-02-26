@@ -46,7 +46,7 @@ public class BookController {
      */
     @PutMapping("/{id}")
     public RestBean<Void> updateBook(
-            @PathVariable Long id,
+            @PathVariable long id,
             @RequestBody @Valid BookSaveReq req) {
         bookService.updateBook(id, req);
         return RestBean.success();
@@ -54,7 +54,7 @@ public class BookController {
 
     //删除书本
     @DeleteMapping("/{id}")
-    public RestBean<Void> deleteBook(@PathVariable Long id) {
+    public RestBean<Void> deleteBook(@PathVariable long id) {
         bookService.deleteBook(id);
         return RestBean.success();
     }
@@ -62,7 +62,7 @@ public class BookController {
 
     //状态变更
     @PutMapping("/status/{id}")
-    public RestBean<Void> updateBookStatus(@PathVariable Long id,
+    public RestBean<Void> updateBookStatus(@PathVariable long id,
                                            @RequestParam @NotBlank BookStatusEnum status ) {
 
         bookService.updateStatus(id, status);

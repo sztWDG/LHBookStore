@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Accessors(chain = true)
 public class UserLoginResp {
-    Long id;
+    long id;
     String username;
     String email;
     String avatar;

@@ -19,7 +19,7 @@ public class UserService {
     private Converter converter;
 
     public UserInfoResp getUserInfo() {
-        Long userId = StpUtil.getLoginIdAsLong();
+        long userId = StpUtil.getLoginIdAsLong();
         User user = userRepository.getById(userId);
         UserInfoResp userInfoResp = converter.convert(user, UserInfoResp.class);
         userInfoResp.setRole("user");

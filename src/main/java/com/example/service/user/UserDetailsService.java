@@ -23,7 +23,7 @@ public class UserDetailsService {
     @Resource
     private UserRepository userRepository;
 
-    public UserDetailsResp getUserDetails(Long userId) {
+    public UserDetailsResp getUserDetails(long userId) {
         UserDetails userDetails = userDetailsRepository.getUserDetailsByUserId(userId);
         UserDetailsResp userDetailsResp = converter.convert(userDetails, UserDetailsResp.class);
         String username = userRepository.getById(userId).getUsername();
@@ -31,7 +31,7 @@ public class UserDetailsService {
         return userDetailsResp;
     }
 
-    public synchronized void saveUserDetails(Long userId, DetailsSaveReq saveReq) {
+    public synchronized void saveUserDetails(long userId, DetailsSaveReq saveReq) {
         User user = userRepository.getById(userId);
         //判断用户名是否存在
         if (!user.getUsername().equals(saveReq.getUsername())) {

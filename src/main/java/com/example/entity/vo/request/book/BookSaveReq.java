@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 @Data
 @Accessors(chain = true)
 @AllArgsConstructor
@@ -21,7 +19,7 @@ public class BookSaveReq {
     String author;
     String publisher;
     String isbn;
-    BigDecimal price;
+    double price;
     int number;
     @Nullable
     String cover;

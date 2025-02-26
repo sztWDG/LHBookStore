@@ -18,12 +18,12 @@ import lombok.experimental.Accessors;
 @AllArgsConstructor
 public class UserDetails {
     @TableId(type = IdType.AUTO)
-    Long id;
+    long id;
     int gender;
     String phone;
     String qq;
     String wx;
     String description;
-    Long userId;
+    long userId;
 
 }

@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 public class UserDetailsResp {
-    int id;
+    long id;
     int gender;
     String phone;
     String qq;

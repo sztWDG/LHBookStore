@@ -1,12 +1,15 @@
-package com.example.entity.vo.response.book;
+package com.example.entity.dto;
 
 import com.example.entity.enums.BookStatusEnum;
+import jakarta.annotation.Nullable;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.experimental.Accessors;
+import lombok.NoArgsConstructor;
 
 @Data
-@Accessors(chain = true)
-public class BooksResp {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ItemBook {
     long id;
     String name;
     String author;
@@ -14,8 +17,10 @@ public class BooksResp {
     String isbn;
     double price;
     int number;
+    @Nullable
     String cover;
     BookStatusEnum status;
     Long typeId;
+    @Nullable
     String description;
 }

@@ -21,8 +21,8 @@ public final class Const {
     //用户角色
     public final static Integer ROLE_DEFAULT = 3;
     public final static Integer ROLE_PHOTOGRAPHER = 2;
-    //购物车
-    public final static String CART = "cart:";
+    //购物车;
+    public final static String SHOPPING_CART_PRE = "shopping_cart:userId_";
     public final static String USER_BLACK_LIST = "user:blacklist:";
 
 }
