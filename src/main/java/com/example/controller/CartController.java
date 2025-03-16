@@ -2,6 +2,8 @@ package com.example.controller;
 
 import com.example.entity.RestBean;
 import com.example.entity.vo.request.cart.ShoppingAddReq;
+import com.example.entity.vo.request.cart.ShoppingBuyAllReq;
+import com.example.entity.vo.request.cart.ShoppingBuyReq;
 import com.example.entity.vo.response.cart.ShoppingCartResp;
 import com.example.service.cart.ShoppingCartService;
 import jakarta.annotation.Resource;
@@ -40,7 +42,8 @@ public class CartController {
 
 
     @DeleteMapping("/{id}")
-    public RestBean<Void> deleteItem(@PathVariable Integer id) {
+    public RestBean<Void> deleteItem(@PathVariable String id) {
+        shoppingCartService.removeCart(id);
         return RestBean.success();
     }
 
@@ -50,7 +53,9 @@ public class CartController {
      * @return
      */
     @PostMapping("/deleteAll")
-    public RestBean<Void> deleteCart(@RequestBody @Valid List<Integer> ids) {
+    public RestBean<Void> deleteCart(@RequestBody @Valid List<String> ids) {
+
+        shoppingCartService.deleteAll(ids);
 
         return RestBean.success();
     }
@@ -59,12 +64,15 @@ public class CartController {
 
     //应该通过ids进行购买？
     @PostMapping("/buy")
-    public RestBean<Void> buyCombo(@RequestBody @Valid ShoppingAddReq item) {
+    public RestBean<Void> buy(@RequestBody @Valid ShoppingBuyReq req) {
+        shoppingCartService.buy(req);
         return RestBean.success();
     }
 
     @PostMapping("/buyAll")
-    public RestBean<Void> buyAll(@RequestBody @Valid List<ShoppingAddReq> items) {
+    public RestBean<Void> buyAll(@RequestBody @Valid ShoppingBuyAllReq req) {
+
+        shoppingCartService.buyAll(req);
         return RestBean.success();
     }
 

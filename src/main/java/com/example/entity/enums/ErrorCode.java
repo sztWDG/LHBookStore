@@ -22,6 +22,8 @@ public enum ErrorCode {
     SYSTEM_ERROR(500, "系统错误");
 
 
+
+
     private final int code;
     private final String message;
 

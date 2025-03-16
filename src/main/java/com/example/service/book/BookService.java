@@ -76,7 +76,6 @@ public class BookService {
 
         if (bookRepository.isBookIsbnExists(req.getIsbn())) {
             throw new BookIsbnIsExistsException();
-
         }
         Book book = converter.convert(req, Book.class);
         bookRepository.save(book);

@@ -28,7 +28,6 @@ public class BookController {
             @RequestParam @Nullable Long typeId
     ) {
         return RestBean.success(bookService.showBooks(pageIndex, pageSize, name, author, typeId));
-
     }
 
     //添加书本

@@ -18,7 +18,6 @@ public class BaseEntity {
     @TableField(fill = FieldFill.UPDATE)
     Long modifier;
 
-
     LocalDateTime createTime;
     LocalDateTime modifyTime;
 }
