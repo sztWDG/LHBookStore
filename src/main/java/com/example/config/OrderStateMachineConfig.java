@@ -3,16 +3,18 @@ package com.example.config;
 import com.example.entity.dto.Order;
 import com.example.entity.enums.OrderEvents;
 import com.example.entity.enums.OrderStatus;
+import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.statemachine.StateMachineContext;
 import org.springframework.statemachine.StateMachinePersist;
 import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
+import org.springframework.statemachine.data.redis.RedisStateMachineContextRepository;
 import org.springframework.statemachine.persist.DefaultStateMachinePersister;
-import org.springframework.statemachine.support.DefaultStateMachineContext;
 
 import java.util.EnumSet;
 
@@ -20,8 +22,13 @@ import java.util.EnumSet;
 @EnableStateMachine(name = "orderStateMachine")
 public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<OrderStatus, OrderEvents> {
 
+
+    @Resource
+    private RedisConnectionFactory redisConnectionFactory;
+
     /**
      * 配置状态
+     *
      * @param states
      * @throws Exception
      */
@@ -34,6 +41,7 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
 
     /**
      * 配置状态转换事件关系
+     *
      * @param transitions
      * @throws Exception
      */
@@ -54,28 +62,45 @@ public class OrderStateMachineConfig extends StateMachineConfigurerAdapter<Order
                 .withExternal().source(OrderStatus.RECEIVED).target(OrderStatus.FINISHED)
                 .event(OrderEvents.FINISH);
     }
+
+    @Bean
+    public RedisStateMachineContextRepository<OrderStatus, OrderEvents>
+    orderStateMachineContextRepository() {
+        return new RedisStateMachineContextRepository<>(redisConnectionFactory);
+    }
+
     /**
      * 持久化配置
      * 在实际使用中，可以配合Redis等进行持久化操作
+     *
      * @return
      */
     @Bean
-    public DefaultStateMachinePersister persister() {
+    public DefaultStateMachinePersister<OrderStatus, OrderEvents, Order> persister() {
         return new DefaultStateMachinePersister<>(
-                new StateMachinePersist<Object, Object, Order>() {
+                new StateMachinePersist<OrderStatus, OrderEvents, Order>() {
 
-            @Override
-            public void write(StateMachineContext<Object, Object> context, Order order)
-                    throws Exception {
-                //此处没有进行持久化操作
-            }
+                    final RedisStateMachineContextRepository<OrderStatus, OrderEvents> orderStateMachineContextRepository = orderStateMachineContextRepository();
 
-            @Override
-            public StateMachineContext<Object, Object> read(Order order) throws Exception {
-                //此处直接获取Order中的状态，其实并没有进行持久化读取操作
-                return new DefaultStateMachineContext(order.getStatus(),null,null,null);
-            }
-        });
+                    @Override
+                    public void write(StateMachineContext<OrderStatus, OrderEvents> context, Order order)
+                            throws Exception {
+
+                        //此处没有进行持久化操作
+                        orderStateMachineContextRepository.save(context, String.valueOf(order.getId()));
+
+
+                    }
+
+                    @Override
+                    public StateMachineContext<OrderStatus, OrderEvents> read(Order order) throws Exception {
+                        //此处直接获取Order中的状态，其实并没有进行持久化读取操作
+//                        return new DefaultStateMachineContext(order.getStatus(), null, null, null);
+
+                        return orderStateMachineContextRepository.getContext(String.valueOf(order.getId()));
+
+                    }
+                });
     }
 
 

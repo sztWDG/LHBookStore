@@ -34,6 +34,12 @@
     </dependencyManagement>
 
     <dependencies>
+        <!-- -->
+        <dependency>
+            <groupId>org.springframework.statemachine</groupId>
+            <artifactId>spring-statemachine-data-redis</artifactId>
+            <version>4.0.0</version>
+        </dependency>
         <!--Spring状态机 -->
         <dependency>
             <groupId>org.springframework.statemachine</groupId>

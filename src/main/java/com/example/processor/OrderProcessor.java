@@ -33,7 +33,11 @@ public class OrderProcessor{
         Order order = (Order) message.getHeaders().get("order");
 
         persist.restore(orderStateMachine,order);
-        return orderStateMachine.sendEvent(message);
+        boolean result = orderStateMachine.sendEvent(message);
+        persist.persist(orderStateMachine,order);
+
+
+        return result;
     }
 
 }
